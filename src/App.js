@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import "./App.scss";
+import "./styles/todo.scss";
 
 const Homepage = lazy(() => import("./pages/homepage/Homepage"));
 const Todo = lazy(() => import("./pages/todo/Todo"));

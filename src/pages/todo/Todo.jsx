@@ -23,8 +23,6 @@ function Todo() {
   });
 
   const handleDragDrop = ({ destination, source }) => {
-    console.log(source);
-    console.log(destination);
     if (!destination) {
       return console.log("not dropped in droppable");
     }
@@ -50,8 +48,8 @@ function Todo() {
     });
   };
 
-  const handleNewTodo = async () => {
-    await setDataList((prev) => {
+  const handleNewTodo = () => {
+    setDataList((prev) => {
       return {
         ...prev,
         todo: {
@@ -66,28 +64,11 @@ function Todo() {
         },
       };
     });
-
     setText("");
   };
 
-  useEffect(() => {
-    if (dataList.todo.items.length > 0) {
-      localStorage.setItem("itemsLists", JSON.stringify(dataList));
-    }
-  }, [dataList]);
-
-  useEffect(() => {
-    if (localStorage) {
-      setDataList(
-        JSON.parse(localStorage.getItem("itemsLists"))
-          ? JSON.parse(localStorage.getItem("itemsLists"))
-          : dataList
-      );
-    }
-  }, []);
-
   const handleDelete = (id) => {
-    let arr = _.map(dataList, (o, k) => {
+    let arr = _.map(dataList, (o) => {
       return _.filter(o.items, (el) => {
         return el.id !== id;
       });
@@ -114,9 +95,25 @@ function Todo() {
     setText("");
   };
 
+  useEffect(() => {
+    if (dataList.todo.items.length > 0) {
+      localStorage.setItem("itemsLists", JSON.stringify(dataList));
+    }
+  }, [dataList]);
+
+  useEffect(() => {
+    if (localStorage) {
+      setDataList(
+        JSON.parse(localStorage.getItem("itemsLists"))
+          ? JSON.parse(localStorage.getItem("itemsLists"))
+          : dataList
+      );
+    }
+  }, []);
+
   return (
-    <Row gutter={[1, 24]} justify="center">
-      <Col xs={12}>
+    <Row gutter={[1, 24]} justify="center" className="todo-ui">
+      <Col xs={24} md={12}>
         <label>Enter New Todo: </label>
         <input
           type="text"
@@ -131,7 +128,7 @@ function Todo() {
           <Row gutter={24}>
             {_.map(dataList, (data, key) => {
               return (
-                <Col xs={8} key={key}>
+                <Col xs={24} md={8} key={key}>
                   <h2>{data.title}</h2>
                   <Droppable droppableId={key} key={key}>
                     {(provided, n) => {
